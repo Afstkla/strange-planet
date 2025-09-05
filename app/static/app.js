@@ -102,14 +102,202 @@ async function translateText(text, model) {
     }
 }
 
+let effectsTimeout = null;
+
 function showLoading() {
     loadingDiv.style.display = 'block';
     copyBtn.disabled = true;
+    
+    // EXTREME EFFECTS START
+    startExtremeEffects();
+    
+    // Clear any existing timeout
+    if (effectsTimeout) {
+        clearTimeout(effectsTimeout);
+    }
 }
 
 function hideLoading() {
-    loadingDiv.style.display = 'none';
-    copyBtn.disabled = false;
+    // Always ensure effects run for at least 1.5 seconds for the full experience
+    const minEffectDuration = 1500;
+    
+    effectsTimeout = setTimeout(() => {
+        loadingDiv.style.display = 'none';
+        copyBtn.disabled = false;
+        
+        // EXTREME EFFECTS STOP
+        stopExtremeEffects();
+    }, minEffectDuration);
+}
+
+// EXTREME SCANNING EFFECTS
+function startExtremeEffects() {
+    // Add scanning beam
+    const scanBeam = document.createElement('div');
+    scanBeam.className = 'scan-beam';
+    scanBeam.id = 'scan-beam';
+    document.querySelector('.translator-container').appendChild(scanBeam);
+    
+    // Add processing overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'processing-overlay active';
+    overlay.id = 'processing-overlay';
+    document.querySelector('.container').appendChild(overlay);
+    
+    // Add data stream with matrix effect
+    createDataStream();
+    
+    // Random screen glitch - faster for quick translations
+    setInterval(() => {
+        if (loadingDiv.style.display === 'block') {
+            createScreenGlitch();
+        }
+    }, 400);
+    
+    // Random alien popup emojis - much faster burst
+    setInterval(() => {
+        if (loadingDiv.style.display === 'block') {
+            createAlienPopup();
+        }
+    }, 300);
+    
+    // Scanning lines
+    createScanLines();
+    
+    // Play random alien sounds
+    playAlienSounds();
+}
+
+function stopExtremeEffects() {
+    // Remove all effects
+    const effects = ['scan-beam', 'processing-overlay', 'data-stream', 'screen-glitch'];
+    effects.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) element.remove();
+    });
+    
+    // Clear scanning lines
+    document.querySelectorAll('.scan-line').forEach(line => line.remove());
+    
+    // Stop sounds
+    stopAlienSounds();
+}
+
+function createDataStream() {
+    const dataStream = document.createElement('div');
+    dataStream.className = 'data-stream active';
+    dataStream.id = 'data-stream';
+    document.querySelector('.container').appendChild(dataStream);
+    
+    // Create matrix characters
+    const chars = '01◈※⟦⟧⟳⟡░▒▓█';
+    for (let i = 0; i < 50; i++) {
+        setTimeout(() => {
+            if (document.getElementById('data-stream')) {
+                const char = document.createElement('div');
+                char.className = 'matrix-char';
+                char.textContent = chars[Math.floor(Math.random() * chars.length)];
+                char.style.left = Math.random() * 180 + 'px';
+                char.style.animationDelay = Math.random() * 2 + 's';
+                dataStream.appendChild(char);
+                
+                setTimeout(() => char.remove(), 2000);
+            }
+        }, i * 100);
+    }
+}
+
+function createScreenGlitch() {
+    const glitch = document.createElement('div');
+    glitch.className = 'screen-glitch';
+    glitch.id = 'screen-glitch';
+    document.body.appendChild(glitch);
+    
+    setTimeout(() => glitch.remove(), 300);
+}
+
+function createAlienPopup() {
+    const aliens = [
+        '🛸', '👽', '🛰️', '🌌', '⭐', '🔮', '🌟', '💫', '🎭', '🎪', '🎨', '🎯',
+        '🌀', '⚡', '🔥', '💥', '✨', '🎆', '🎇', '🌈', '🦄', '🐙', '👁️', '🧿',
+        '🔬', '🧪', '⚗️', '🧬', '💎', '🔭', '🎮', '🕹️', '🎲', '🃏', '🎨', '🎪',
+        '🌊', '🌪️', '❄️', '☄️', '🌙', '☀️', '🪐', '🌍', '🌎', '🌏', '🚀', '🛰️',
+        '👾', '🤖', '🦾', '🦿', '🧠', '👁️‍🗨️', '💭', '💡', '⚛️', '🧪', '🔬', '🧬'
+    ];
+    const popup = document.createElement('div');
+    popup.className = 'alien-popup';
+    popup.textContent = aliens[Math.floor(Math.random() * aliens.length)];
+    popup.style.left = Math.random() * (window.innerWidth - 100) + 'px';
+    popup.style.top = Math.random() * (window.innerHeight - 100) + 'px';
+    
+    document.body.appendChild(popup);
+    setTimeout(() => popup.remove(), 2000);
+}
+
+function createScanLines() {
+    for (let i = 0; i < 5; i++) {
+        setTimeout(() => {
+            if (loadingDiv.style.display === 'block') {
+                const scanLine = document.createElement('div');
+                scanLine.className = 'scan-line';
+                scanLine.style.animationDelay = i * 0.2 + 's';
+                document.querySelector('.translator-container').appendChild(scanLine);
+                
+                setTimeout(() => scanLine.remove(), 2000);
+            }
+        }, i * 200);
+    }
+}
+
+// ALIEN SOUND EFFECTS
+let soundInterval = null;
+
+function playAlienSounds() {
+    // Create audio context for Web Audio API sounds
+    if (typeof AudioContext !== 'undefined' || typeof webkitAudioContext !== 'undefined') {
+        const AudioContextClass = AudioContext || webkitAudioContext;
+        const audioContext = new AudioContextClass();
+        
+        soundInterval = setInterval(() => {
+            if (loadingDiv.style.display === 'block') {
+                playAlienBeep(audioContext);
+            }
+        }, 200 + Math.random() * 400);
+    }
+}
+
+function playAlienBeep(audioContext) {
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    
+    // Random alien frequencies
+    const frequencies = [220, 330, 440, 554, 659, 880];
+    oscillator.frequency.setValueAtTime(
+        frequencies[Math.floor(Math.random() * frequencies.length)], 
+        audioContext.currentTime
+    );
+    
+    // Random waveforms for weird sounds
+    const waveforms = ['sine', 'square', 'sawtooth', 'triangle'];
+    oscillator.type = waveforms[Math.floor(Math.random() * waveforms.length)];
+    
+    // Volume envelope
+    gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+    gainNode.gain.linearRampToValueAtTime(0.1, audioContext.currentTime + 0.01);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.3);
+    
+    oscillator.start(audioContext.currentTime);
+    oscillator.stop(audioContext.currentTime + 0.3);
+}
+
+function stopAlienSounds() {
+    if (soundInterval) {
+        clearInterval(soundInterval);
+        soundInterval = null;
+    }
 }
 
 function showError(message) {
