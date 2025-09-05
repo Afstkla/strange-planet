@@ -6,6 +6,7 @@ const outputText = document.getElementById('output-text');
 const loadingDiv = document.getElementById('loading');
 const errorDiv = document.getElementById('error');
 const copyBtn = document.getElementById('copy-btn');
+const speechBtn = document.getElementById('speech-btn');
 
 
 function handleInputChange() {
@@ -187,23 +188,27 @@ function createDataStream() {
     const dataStream = document.createElement('div');
     dataStream.className = 'data-stream active';
     dataStream.id = 'data-stream';
-    document.querySelector('.container').appendChild(dataStream);
+    document.body.appendChild(dataStream); // Append to body instead of container
     
-    // Create matrix characters
+    // Create matrix characters across full screen
     const chars = '01◈※⟦⟧⟳⟡░▒▓█';
-    for (let i = 0; i < 50; i++) {
+    const screenWidth = window.innerWidth;
+    const numChars = Math.floor(screenWidth / 15); // More characters for wider screens
+    
+    for (let i = 0; i < numChars; i++) {
         setTimeout(() => {
             if (document.getElementById('data-stream')) {
                 const char = document.createElement('div');
                 char.className = 'matrix-char';
                 char.textContent = chars[Math.floor(Math.random() * chars.length)];
-                char.style.left = Math.random() * 180 + 'px';
+                char.style.left = Math.random() * (screenWidth - 20) + 'px'; // Full screen width
                 char.style.animationDelay = Math.random() * 2 + 's';
+                char.style.animationDuration = (2 + Math.random() * 2) + 's'; // Variable fall speed
                 dataStream.appendChild(char);
                 
-                setTimeout(() => char.remove(), 2000);
+                setTimeout(() => char.remove(), 4000); // Longer lifetime for full screen
             }
-        }, i * 100);
+        }, i * 50); // Faster creation for more density
     }
 }
 
@@ -385,3 +390,140 @@ inputText.addEventListener('input', (e) => {
     
     handleInputChange();
 });
+
+// ALIEN SPEECH SYNTHESIS
+let currentSpeech = null;
+let speechEffectsInterval = null;
+
+function speakAlienText() {
+    const textToSpeak = outputText.value.trim();
+    
+    if (!textToSpeak) {
+        showError('No alien translation to transmit!');
+        return;
+    }
+    
+    // Stop any current speech
+    if (speechSynthesis.speaking) {
+        speechSynthesis.cancel();
+        stopSpeechEffects();
+        return;
+    }
+    
+    // Create speech synthesis utterance
+    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+    
+    // ALIEN VOICE PARAMETERS
+    utterance.pitch = 0.3;  // Very low pitch for alien depth
+    utterance.rate = 0.85;  // Slightly slower for dramatic effect
+    utterance.volume = 0.9;
+    
+    // Try to find a robotic-sounding voice
+    const voices = speechSynthesis.getVoices();
+    const roboticVoice = voices.find(v => 
+        v.name.includes('Microsoft') || 
+        v.name.includes('Google') ||
+        v.name.includes('Zira') ||
+        v.name.includes('David') ||
+        v.name.toLowerCase().includes('male')
+    );
+    if (roboticVoice) {
+        utterance.voice = roboticVoice;
+    }
+    
+    // Speech event handlers
+    utterance.onstart = () => {
+        startSpeechEffects();
+        speechBtn.classList.add('speaking');
+        speechBtn.textContent = '⏹️ STOP TRANSMISSION';
+        speechBtn.disabled = false;
+    };
+    
+    utterance.onend = () => {
+        stopSpeechEffects();
+        speechBtn.classList.remove('speaking');
+        speechBtn.textContent = '🔊 TRANSMIT AUDIO SIGNAL';
+        speechBtn.disabled = false;
+    };
+    
+    utterance.onerror = (event) => {
+        stopSpeechEffects();
+        speechBtn.classList.remove('speaking');
+        speechBtn.textContent = '🔊 TRANSMIT AUDIO SIGNAL';
+        speechBtn.disabled = false;
+        showError('Audio transmission failed: ' + event.error);
+    };
+    
+    // Start speech
+    currentSpeech = utterance;
+    speechSynthesis.speak(utterance);
+}
+
+function startSpeechEffects() {
+    // Pulse the output text area
+    outputText.style.animation = 'speechTextPulse 1s ease-in-out infinite';
+    
+    // Random screen glitches during speech
+    speechEffectsInterval = setInterval(() => {
+        if (speechSynthesis.speaking) {
+            createScreenGlitch();
+            
+            // Random alien popup during speech
+            if (Math.random() < 0.3) {
+                createAlienPopup();
+            }
+        }
+    }, 800);
+    
+    // Add speech pulse animation to container
+    const container = document.querySelector('.container');
+    container.style.animation = 'containerPulse 2s ease-in-out infinite, speechContainerGlow 1.5s ease-in-out infinite';
+}
+
+function stopSpeechEffects() {
+    // Stop text pulsing
+    outputText.style.animation = '';
+    
+    // Clear effects interval
+    if (speechEffectsInterval) {
+        clearInterval(speechEffectsInterval);
+        speechEffectsInterval = null;
+    }
+    
+    // Reset container animation
+    const container = document.querySelector('.container');
+    container.style.animation = 'containerPulse 4s ease-in-out infinite';
+}
+
+// Initialize speech synthesis voices (needed for some browsers)
+speechSynthesis.onvoiceschanged = () => {
+    // Voice list is now available
+    if (speechBtn) {
+        speechBtn.disabled = false;
+    }
+};
+
+// Add speech text pulse animation CSS via JavaScript
+const speechStyle = document.createElement('style');
+speechStyle.textContent = `
+    @keyframes speechTextPulse {
+        0%, 100% { 
+            border-color: var(--alien-green);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+        }
+        50% { 
+            border-color: var(--alien-orange);
+            box-shadow: 0 0 40px rgba(245, 158, 11, 0.6);
+        }
+    }
+    
+    @keyframes speechContainerGlow {
+        0%, 100% { 
+            box-shadow: 0 0 50px rgba(124, 58, 237, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        50% { 
+            box-shadow: 0 0 100px rgba(245, 158, 11, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+    }
+`;
+document.head.appendChild(speechStyle);

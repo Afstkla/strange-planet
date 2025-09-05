@@ -258,6 +258,76 @@
             box-shadow: none;
         }
 
+        .button-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .speech-btn {
+            padding: 15px 25px;
+            background: linear-gradient(135deg, var(--alien-purple) 0%, var(--alien-pink) 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            flex: 1;
+        }
+
+        .speech-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .speech-btn:hover::before {
+            left: 100%;
+        }
+
+        .speech-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 10px 20px rgba(139, 92, 246, 0.4);
+        }
+
+        .speech-btn:disabled {
+            background: rgba(107, 114, 128, 0.5);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .speech-btn.speaking {
+            background: linear-gradient(135deg, var(--alien-orange) 0%, var(--alien-red) 100%);
+            animation: speechPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes speechPulse {
+            0%, 100% { 
+                box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+            }
+            50% { 
+                box-shadow: 0 0 40px rgba(239, 68, 68, 0.6);
+            }
+        }
+
+        .copy-btn {
+            flex: 1;
+            margin-top: 0;
+        }
+
         .loading {
             display: none;
             color: var(--alien-orange);
@@ -346,15 +416,15 @@
         }
 
         .data-stream {
-            position: absolute;
+            position: fixed;
             top: 0;
-            right: 0;
-            width: 200px;
-            height: 100%;
-            background: rgba(15, 15, 35, 0.9);
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 15, 35, 0.1);
             overflow: hidden;
             pointer-events: none;
-            z-index: 5;
+            z-index: 1;
             opacity: 0;
         }
 
@@ -509,7 +579,10 @@
                     readonly 
                     placeholder="Advanced alien verbiage shall materialize within this receptacle..."
                 ></textarea>
-                <button class="copy-btn" id="copy-btn" onclick="copyTranslation()">※ DUPLICATE TRANSLATION ※</button>
+                <div class="button-container">
+                    <button class="copy-btn" id="copy-btn" onclick="copyTranslation()">※ DUPLICATE TRANSLATION ※</button>
+                    <button class="speech-btn" id="speech-btn" onclick="speakAlienText()">🔊 TRANSMIT AUDIO SIGNAL</button>
+                </div>
             </div>
         </div>
     </div>
