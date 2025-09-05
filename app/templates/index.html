@@ -5,150 +5,283 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Strange Planet Translator</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap');
+        
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
+        :root {
+            --alien-purple: #8B5CF6;
+            --alien-pink: #EC4899;
+            --alien-cyan: #06B6D4;
+            --alien-green: #10B981;
+            --alien-orange: #F59E0B;
+            --alien-red: #EF4444;
+            --dark-space: #0F0F23;
+            --weird-glow: #7C3AED;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Space Mono', monospace;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(6, 182, 212, 0.2) 0%, transparent 50%),
+                linear-gradient(135deg, #0F0F23 0%, #1E1B4B 50%, #312E81 100%);
             min-height: 100vh;
             padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(139, 92, 246, 0.03) 2px,
+                    rgba(139, 92, 246, 0.03) 4px
+                );
+            pointer-events: none;
+            z-index: 1;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, rgba(15, 15, 35, 0.95) 0%, rgba(30, 27, 75, 0.95) 100%);
+            border: 2px solid var(--weird-glow);
+            border-radius: 25px;
+            box-shadow: 
+                0 0 50px rgba(124, 58, 237, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
             overflow: hidden;
+            backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 2;
+            animation: containerPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes containerPulse {
+            0%, 100% { box-shadow: 0 0 50px rgba(124, 58, 237, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1); }
+            50% { box-shadow: 0 0 80px rgba(236, 72, 153, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.2); }
         }
 
         .header {
-            background: #2d3748;
+            background: linear-gradient(135deg, var(--alien-purple) 0%, var(--alien-pink) 100%);
             color: white;
             padding: 30px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
         }
 
         .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            font-weight: 300;
+            font-family: 'Orbitron', monospace;
+            font-size: 2.8em;
+            font-weight: 900;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            animation: titleGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            0% { text-shadow: 0 0 20px rgba(255, 255, 255, 0.5), 0 0 30px var(--alien-cyan); }
+            100% { text-shadow: 0 0 30px rgba(255, 255, 255, 0.8), 0 0 40px var(--alien-green); }
         }
 
         .header p {
-            opacity: 0.8;
-            font-size: 1.1em;
+            font-size: 1.2em;
+            opacity: 0.9;
+            font-style: italic;
+            animation: subtitleFloat 3s ease-in-out infinite;
         }
 
-        .controls {
-            padding: 20px 30px;
-            background: #f7fafc;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .model-selector {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .model-selector label {
-            font-weight: 600;
-            color: #2d3748;
-        }
-
-        .model-selector select {
-            padding: 8px 12px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 1em;
-            background: white;
+        @keyframes subtitleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
         }
 
         .translator-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            min-height: 500px;
+            min-height: 600px;
+            position: relative;
+        }
+
+        .translator-container::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 2px;
+            height: 80%;
+            background: linear-gradient(to bottom, var(--alien-purple), var(--alien-pink), var(--alien-cyan));
+            animation: dividerPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes dividerPulse {
+            0%, 100% { opacity: 0.5; width: 2px; }
+            50% { opacity: 1; width: 4px; }
         }
 
         .input-section, .output-section {
             padding: 30px;
             display: flex;
             flex-direction: column;
-        }
-
-        .input-section {
-            border-right: 1px solid #e2e8f0;
+            position: relative;
         }
 
         .section-title {
-            font-size: 1.2em;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: #2d3748;
+            font-family: 'Orbitron', monospace;
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--alien-cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            text-shadow: 0 0 10px var(--alien-cyan);
+            animation: titleFlicker 4s ease-in-out infinite;
+        }
+
+        @keyframes titleFlicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
         }
 
         textarea {
             flex: 1;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            padding: 20px;
-            font-size: 1em;
-            font-family: inherit;
+            border: 2px solid var(--alien-purple);
+            border-radius: 15px;
+            padding: 25px;
+            font-size: 1.1em;
+            font-family: 'Space Mono', monospace;
             resize: none;
-            transition: border-color 0.3s ease;
+            transition: all 0.3s ease;
+            background: rgba(15, 15, 35, 0.8);
+            color: #E5E7EB;
+            line-height: 1.6;
         }
 
         textarea:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: var(--alien-pink);
+            box-shadow: 0 0 30px rgba(236, 72, 153, 0.5);
+            transform: scale(1.02);
+        }
+
+        textarea::placeholder {
+            color: rgba(229, 231, 235, 0.5);
+            font-style: italic;
         }
 
         #input-text {
-            background: #ffffff;
+            background: rgba(15, 15, 35, 0.9);
         }
 
         #output-text {
-            background: #f7fafc;
+            background: rgba(30, 27, 75, 0.8);
+            border-color: var(--alien-green);
         }
 
         .copy-btn {
-            margin-top: 15px;
-            padding: 10px 20px;
-            background: #667eea;
+            margin-top: 20px;
+            padding: 15px 25px;
+            background: linear-gradient(135deg, var(--alien-green) 0%, var(--alien-cyan) 100%);
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             font-size: 1em;
-            transition: background-color 0.3s ease;
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .copy-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .copy-btn:hover::before {
+            left: 100%;
         }
 
         .copy-btn:hover {
-            background: #5a67d8;
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.4);
         }
 
         .copy-btn:disabled {
-            background: #cbd5e0;
+            background: rgba(107, 114, 128, 0.5);
             cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
 
         .loading {
             display: none;
-            color: #667eea;
+            color: var(--alien-orange);
             font-style: italic;
-            margin-top: 10px;
+            margin-top: 15px;
+            animation: loadingPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes loadingPulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
         }
 
         .error {
-            color: #e53e3e;
-            margin-top: 10px;
+            color: var(--alien-red);
+            margin-top: 15px;
             display: none;
+            animation: errorShake 0.5s ease-in-out;
+        }
+
+        @keyframes errorShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
         }
 
         @media (max-width: 768px) {
@@ -156,49 +289,68 @@
                 grid-template-columns: 1fr;
             }
             
-            .input-section {
-                border-right: none;
-                border-bottom: 1px solid #e2e8f0;
+            .translator-container::before {
+                width: 80%;
+                height: 2px;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
             }
             
             .header h1 {
-                font-size: 2em;
+                font-size: 2.2em;
             }
             
             body {
                 padding: 10px;
             }
         }
+
+        /* Alien particle effects */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--alien-cyan);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>Strange Planet Translator</h1>
-            <p>Transform your words into the verbose, clinical language of Strange Planet</p>
+            <h1>◈ LINGUISTIC CONVERSION APPARATUS ◈</h1>
+            <p>※ Transmutating primitive human utterances into sophisticated extraterrestrial nomenclature ※</p>
         </div>
         
 
         <div class="translator-container">
             <div class="input-section">
-                <div class="section-title">Enter your text:</div>
+                <div class="section-title">⟦ PRIMITIVE UTTERANCE INPUT ⟧</div>
                 <textarea 
                     id="input-text" 
-                    placeholder="Type your message here... (e.g., 'I'm happy to see my dog')"
+                    placeholder="Insert crude human linguistic expressions... (e.g., 'I experience joy when observing my canine companion')"
                     autocomplete="off"
                 ></textarea>
-                <div class="loading" id="loading">Translating...</div>
+                <div class="loading" id="loading">⟳ Processing linguistic transmutation protocols...</div>
                 <div class="error" id="error"></div>
             </div>
 
             <div class="output-section">
-                <div class="section-title">Strange Planet Translation:</div>
+                <div class="section-title">⟦ EXTRATERRESTRIAL RENDITION ⟧</div>
                 <textarea 
                     id="output-text" 
                     readonly 
-                    placeholder="Your translation will appear here..."
+                    placeholder="Advanced alien verbiage shall materialize within this receptacle..."
                 ></textarea>
-                <button class="copy-btn" id="copy-btn" onclick="copyTranslation()">Copy Translation</button>
+                <button class="copy-btn" id="copy-btn" onclick="copyTranslation()">※ DUPLICATE TRANSLATION ※</button>
             </div>
         </div>
     </div>
