@@ -1,0 +1,24 @@
+[project]
+name = "strange-planet-translator"
+version = "0.1.0"
+description = "A Strange Planet language translator using OpenAI"
+dependencies = [
+    "fastapi>=0.104.0",
+    "uvicorn[standard]>=0.24.0",
+    "openai>=1.0.0",
+    "python-dotenv>=1.0.0",
+    "jinja2>=3.1.2",
+    "python-multipart>=0.0.6"
+]
+requires-python = ">=3.8"
+
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+[tool.uv]
+dev-dependencies = []
