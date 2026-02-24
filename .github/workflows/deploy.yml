@@ -16,6 +16,8 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             cd /var/www/strange-planet
+            git config --global --add safe.directory /var/www/strange-planet
             git pull
-            /var/www/strange-planet/.venv/bin/pip install -e .
+            .venv/bin/pip install -q -e .
+            chown -R www-data:www-data /var/www/strange-planet
             systemctl restart strange-planet
