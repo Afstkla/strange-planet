@@ -33,13 +33,13 @@ function handleInputChange() {
     }
 
     debounceTimer = setTimeout(() => {
-        translateText(text, 'gpt-4.1-nano');
+        translateText(text);
     }, 500);
 }
 
 // --- Translation (streaming) ---
 
-async function translateText(text, model) {
+async function translateText(text) {
     showLoading();
     hideError();
     outputText.value = '';
@@ -51,7 +51,7 @@ async function translateText(text, model) {
         const response = await fetch('/translate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text, model }),
+            body: JSON.stringify({ text }),
             signal: currentController.signal,
         });
 

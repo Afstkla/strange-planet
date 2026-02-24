@@ -54,9 +54,11 @@ templates = Jinja2Templates(directory="app/templates")
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 
+MODEL = "gpt-4.1-nano"
+
+
 class TranslationRequest(BaseModel):
     text: str
-    model: str = "gpt-4.1-nano"
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -92,7 +94,7 @@ async def translate_text(request: Request, translation_request: TranslationReque
 Make it sound like an alien trying to be very precise about human activities. Keep the same meaning but make it absurdly formal and verbose."""
 
         stream = client.chat.completions.create(
-            model=translation_request.model,
+            model=MODEL,
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": translation_request.text}
