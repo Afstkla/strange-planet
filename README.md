@@ -1,146 +1,66 @@
-# 🛸 Strange Planet Translator
+# Linguistic Conversion Apparatus
 
-**◈ LINGUISTIC CONVERSION APPARATUS ◈**
+A device for transmuting primitive human verbal emissions into the refined articulations of an advanced civilization.
 
-Transform your primitive human utterances into the verbose, clinical language of Strange Planet! Experience the most psychedelic, alien-powered translation interface in the galaxy.
+## Purpose of This Apparatus
 
-![Strange Planet Translator Demo](https://img.shields.io/badge/Status-Operational-brightgreen) ![Python](https://img.shields.io/badge/Python-3.8+-blue) ![FastAPI](https://img.shields.io/badge/FastAPI-Latest-green) ![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4.1--nano-purple)
+The beings on this planet communicate using crude abbreviations and imprecise terminology. This apparatus intercepts their utterances and converts them into appropriately verbose and clinically accurate phrasing, as documented by the observer Nathan W. Pyle in his field notes regarding our civilization.
 
-## ✨ Features
+For example, a human might say "I'm hungry" when the correct expression is clearly "I am experiencing a caloric deficit and require sustenance intake."
 
-### 🧠 Translation Engine
-- **OpenAI GPT-4.1-nano** integration for lightning-fast translations
-- **Auto-reload** with 500ms debouncing - no buttons needed!
-- **Request cancellation** - new inputs cancel previous translations
-- **Streaming responses** for real-time translation updates
+## Activating the Apparatus
 
-### 👽 Alien Experience
-- **Psychedelic interface** with space-age fonts (Orbitron, Space Mono)
-- **56 alien emojis** randomly popping up during translation
-- **Scanning beam effects** that sweep across the interface
-- **Matrix data streams** with alien symbols (◈※⟦⟧⟳⟡░▒▓█)
-- **Screen glitch distortions** for authentic alien tech feel
-- **Web Audio API sounds** - bleeps and bloops symphony
-- **Guaranteed 1.5s minimum effect duration** for full experience
+### Required Components
 
-### 🎨 Visual Effects
-- **Pulsing containers** with color-shifting glows
-- **Floating particles** drifting across the interface
-- **Random typing glitches** (5% chance per keystroke)
-- **Shimmer animations** on headers
-- **Processing overlays** with radial gradients
+- The language known as Python (version 3.8 or more recent iterations)
+- An access credential for the OpenAI computational intelligence network
+- The dependency procurement tool called [uv](https://docs.astral.sh/uv/)
 
-## 🚀 Quick Start
+### Initialization Sequence
 
-### Prerequisites
-- Python 3.8+
-- OpenAI API Key
-- [uv](https://docs.astral.sh/uv/) (recommended) or pip
+Obtain the source materials:
 
-### Installation
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/Afstkla/strange-planet.git
-   cd strange-planet
-   ```
-
-2. **Set up your OpenAI API key:**
-   ```bash
-   cp .env.example .env
-   # Edit .env and add your OpenAI API key:
-   # OPENAI_API_KEY=your_api_key_here
-   ```
-
-3. **Run with uv (recommended):**
-   ```bash
-   uv run --with fastapi --with uvicorn --with openai --with python-dotenv --with jinja2 --with python-multipart uvicorn app.main:app --reload --host 0.0.0.0 --port 8001
-   ```
-
-   **Or with pip:**
-   ```bash
-   pip install fastapi uvicorn openai python-dotenv jinja2 python-multipart
-   python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8001
-   ```
-
-4. **Open your browser:**
-   ```
-   http://localhost:8001
-   ```
-
-## 🎭 Usage
-
-1. **Type your text** in the "PRIMITIVE UTTERANCE INPUT" field
-2. **Watch the alien magic happen** - automatic translation after 500ms
-3. **Experience the full alien rave** with visual and audio effects
-4. **Copy your translation** with the "※ DUPLICATE TRANSLATION ※" button
-
-### Example Translations
-- "I'm happy" → "I am experiencing elevated mood indicators"
-- "Let's eat" → "We shall commence sustenance consumption procedures"
-- "I love my dog" → "I harbor deep affection for my domesticated quadruped companion"
-
-## 🛠️ Technology Stack
-
-- **Backend:** FastAPI with streaming responses
-- **AI:** OpenAI GPT-4.1-nano
-- **Frontend:** Jinja2 templates with vanilla JavaScript
-- **Styling:** Pure CSS with advanced animations
-- **Audio:** Web Audio API for alien sound effects
-- **Package Management:** UV/pip compatible
-
-## 🎨 Customization
-
-### Modify Alien Effects
-Edit `app/static/app.js` to adjust:
-- Effect timing intervals
-- Emoji collections
-- Sound frequencies
-- Animation durations
-
-### Change Visual Style
-Edit `app/templates/index.html` CSS section to modify:
-- Color schemes
-- Animations
-- Fonts
-- Layout
-
-### Add New Models
-Edit `app/main.py` to change the default model or add model selection.
-
-## 🐛 Troubleshooting
-
-### Port Already in Use
-If port 8001 is taken, change the port:
 ```bash
-uvicorn app.main:app --reload --port 8002
+git clone https://github.com/Afstkla/strange-planet.git
+cd strange-planet
 ```
 
-### Audio Not Working
-Modern browsers require user interaction before playing audio. The sounds will start after you begin typing.
+Configure the computational intelligence credential:
 
-### Effects Too Intense?
-Edit the timing values in `app/static/app.js` to make effects less frequent.
+```bash
+cp .env.example .env
+```
 
-## 🤝 Contributing
+Place your OpenAI access credential within the `.env` document.
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your alien improvements
-4. Submit a pull request
+Engage the apparatus:
 
-## 📜 License
+```bash
+uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8001
+```
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Direct your rectangular information display device to `http://localhost:8001`.
 
-## 🙏 Acknowledgments
+## Operating the Apparatus
 
-- Inspired by the Strange Planet comic series
-- Built with love for alien aesthetics and weird UX
-- Powered by OpenAI's incredible language models
+1. Deposit your primitive utterance into the left receptacle
+2. The computational intelligence will process your crude phrasing
+3. A refined articulation materializes in the right receptacle
+4. Press the duplication control to transfer the result to your clipboard mechanism
 
----
+The apparatus automatically initiates conversion after 500 milliseconds of keystroke inactivity. There is no need to locate and depress a submission control.
 
-**※ Transform your communication into extraterrestrial sophistication! ※**
+## Construction Materials
 
-🛸 **Happy translating, fellow humans!** 👽
+- **Computational Framework:** FastAPI with response streaming capabilities
+- **Intelligence Engine:** OpenAI GPT-4.1-nano
+- **Visual Interface:** HTML, CSS, and JavaScript without extraneous frameworks
+- **Dependency Coordination:** UV
+
+## Attribution of Intellectual Origin
+
+This apparatus was constructed in admiration of the documented observations by the being known as Nathan W. Pyle. This is merely a tribute creation — all intellectual property regarding the Strange Planet civilization belongs to its original chronicler.
+
+## Permission Documentation
+
+This project operates under the MIT permission framework.

@@ -4,588 +4,412 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Strange Planet Translator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap');
-        
-        * {
+        *, *::before, *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
         :root {
-            --alien-purple: #8B5CF6;
-            --alien-pink: #EC4899;
-            --alien-cyan: #06B6D4;
-            --alien-green: #10B981;
-            --alien-orange: #F59E0B;
-            --alien-red: #EF4444;
-            --dark-space: #0F0F23;
-            --weird-glow: #7C3AED;
+            --bg-deep: #0a0e1a;
+            --bg-card: #0f1424;
+            --bg-elevated: #151b2e;
+            --bg-input: #0c1120;
+            --border-subtle: #1e2a45;
+            --border-focus: #38bdf8;
+            --accent-cyan: #38bdf8;
+            --accent-cyan-muted: #1e6a9e;
+            --accent-violet: #a78bfa;
+            --accent-violet-muted: #6d5aad;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --success: #34d399;
+            --error: #f87171;
+            --glow-cyan: rgba(56, 189, 248, 0.15);
+            --glow-violet: rgba(167, 139, 250, 0.12);
+            --transition-fast: 0.2s ease;
+            --transition-normal: 0.3s ease;
         }
 
         body {
-            font-family: 'Space Mono', monospace;
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(6, 182, 212, 0.2) 0%, transparent 50%),
-                linear-gradient(135deg, #0F0F23 0%, #1E1B4B 50%, #312E81 100%);
+            font-family: 'IBM Plex Mono', monospace;
+            background-color: var(--bg-deep);
+            background-image:
+                radial-gradient(ellipse at 20% 50%, var(--glow-violet) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, var(--glow-cyan) 0%, transparent 50%);
+            color: var(--text-primary);
             min-height: 100vh;
-            padding: 20px;
-            position: relative;
-            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px 24px;
         }
 
+        /* Subtle dot grid background */
         body::before {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                repeating-linear-gradient(
-                    0deg,
-                    transparent,
-                    transparent 2px,
-                    rgba(139, 92, 246, 0.03) 2px,
-                    rgba(139, 92, 246, 0.03) 4px
-                );
+            inset: 0;
+            background-image: radial-gradient(circle at center, rgba(148, 163, 184, 0.04) 1px, transparent 1px);
+            background-size: 32px 32px;
             pointer-events: none;
-            z-index: 1;
+            z-index: 0;
         }
 
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: linear-gradient(135deg, rgba(15, 15, 35, 0.95) 0%, rgba(30, 27, 75, 0.95) 100%);
-            border: 2px solid var(--weird-glow);
-            border-radius: 25px;
-            box-shadow: 
-                0 0 50px rgba(124, 58, 237, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            overflow: hidden;
-            backdrop-filter: blur(10px);
-            position: relative;
-            z-index: 2;
-            animation: containerPulse 4s ease-in-out infinite;
-        }
-
-        @keyframes containerPulse {
-            0%, 100% { box-shadow: 0 0 50px rgba(124, 58, 237, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1); }
-            50% { box-shadow: 0 0 80px rgba(236, 72, 153, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.2); }
-        }
-
-        .header {
-            background: linear-gradient(135deg, var(--alien-purple) 0%, var(--alien-pink) 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
             width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            animation: shimmer 3s ease-in-out infinite;
+            max-width: 1080px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            box-shadow:
+                0 0 60px rgba(56, 189, 248, 0.06),
+                0 0 120px rgba(167, 139, 250, 0.04),
+                0 4px 24px rgba(0, 0, 0, 0.4);
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-height: calc(100vh - 120px);
         }
 
-        @keyframes shimmer {
-            0% { left: -100%; }
-            100% { left: 100%; }
+        /* Header */
+        .header {
+            padding: 36px 40px 28px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-subtle);
+            flex-shrink: 0;
         }
 
         .header h1 {
-            font-family: 'Orbitron', monospace;
-            font-size: 2.8em;
-            font-weight: 900;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-            animation: titleGlow 2s ease-in-out infinite alternate;
+            font-family: 'Syne', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            color: var(--text-primary);
+            margin-bottom: 8px;
         }
 
-        @keyframes titleGlow {
-            0% { text-shadow: 0 0 20px rgba(255, 255, 255, 0.5), 0 0 30px var(--alien-cyan); }
-            100% { text-shadow: 0 0 30px rgba(255, 255, 255, 0.8), 0 0 40px var(--alien-green); }
+        .header h1 span {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-violet));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .header p {
-            font-size: 1.2em;
-            opacity: 0.9;
+        .header .tagline {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-muted);
             font-style: italic;
-            animation: subtitleFloat 3s ease-in-out infinite;
         }
 
-        @keyframes subtitleFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-3px); }
-        }
-
+        /* Two-panel layout */
         .translator-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            min-height: 600px;
-            position: relative;
+            gap: 0;
+            flex: 1;
+            min-height: 0;
         }
 
-        .translator-container::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 2px;
-            height: 80%;
-            background: linear-gradient(to bottom, var(--alien-purple), var(--alien-pink), var(--alien-cyan));
-            animation: dividerPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes dividerPulse {
-            0%, 100% { opacity: 0.5; width: 2px; }
-            50% { opacity: 1; width: 4px; }
-        }
-
-        .input-section, .output-section {
-            padding: 30px;
+        .panel {
             display: flex;
             flex-direction: column;
-            position: relative;
+            padding: 28px 32px 24px;
         }
 
-        .section-title {
-            font-family: 'Orbitron', monospace;
-            font-size: 1.3em;
+        .panel + .panel {
+            border-left: 1px solid var(--border-subtle);
+        }
+
+        .panel-label {
+            font-family: 'Syne', sans-serif;
+            font-size: 0.7rem;
             font-weight: 700;
-            margin-bottom: 20px;
-            color: var(--alien-cyan);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            text-shadow: 0 0 10px var(--alien-cyan);
-            animation: titleFlicker 4s ease-in-out infinite;
+            letter-spacing: 0.12em;
+            color: var(--text-muted);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        @keyframes titleFlicker {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
+        .panel-label::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent-cyan);
+            opacity: 0.6;
         }
 
+        .panel:last-child .panel-label::before {
+            background: var(--accent-violet);
+        }
+
+        /* Text areas */
         textarea {
             flex: 1;
-            border: 2px solid var(--alien-purple);
-            border-radius: 15px;
-            padding: 25px;
-            font-size: 1.1em;
-            font-family: 'Space Mono', monospace;
+            min-height: 200px;
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            padding: 20px;
+            font-size: 0.95rem;
+            font-family: 'IBM Plex Mono', monospace;
+            line-height: 1.7;
             resize: none;
-            transition: all 0.3s ease;
-            background: rgba(15, 15, 35, 0.8);
-            color: #E5E7EB;
-            line-height: 1.6;
+            background: var(--bg-input);
+            color: var(--text-primary);
+            transition: border-color var(--transition-normal), box-shadow var(--transition-normal);
         }
 
         textarea:focus {
             outline: none;
-            border-color: var(--alien-pink);
-            box-shadow: 0 0 30px rgba(236, 72, 153, 0.5);
-            transform: scale(1.02);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 3px var(--glow-cyan), 0 0 20px var(--glow-cyan);
         }
 
         textarea::placeholder {
-            color: rgba(229, 231, 235, 0.5);
+            color: var(--text-muted);
             font-style: italic;
-        }
-
-        #input-text {
-            background: rgba(15, 15, 35, 0.9);
         }
 
         #output-text {
-            background: rgba(30, 27, 75, 0.8);
-            border-color: var(--alien-green);
+            cursor: default;
+        }
+
+        #output-text:focus {
+            border-color: var(--accent-violet);
+            box-shadow: 0 0 0 3px var(--glow-violet), 0 0 20px var(--glow-violet);
+        }
+
+        /* Status area below input */
+        .status-area {
+            min-height: 28px;
+            margin-top: 12px;
+            flex-shrink: 0;
+        }
+
+        /* Loading indicator */
+        .loading-indicator {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-muted);
+            font-size: 0.78rem;
+        }
+
+        .loading-indicator.visible {
+            display: flex;
+        }
+
+        .loading-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .loading-dots span {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--accent-cyan);
+            animation: dotPulse 1.2s ease-in-out infinite;
+        }
+
+        .loading-dots span:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+
+        .loading-dots span:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes dotPulse {
+            0%, 80%, 100% { opacity: 0.25; transform: scale(0.8); }
+            40% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Error message */
+        .error-message {
+            display: none;
+            color: var(--error);
+            font-size: 0.8rem;
+        }
+
+        .error-message.visible {
+            display: block;
+        }
+
+        /* Output footer with copy button */
+        .output-actions {
+            margin-top: 14px;
+            display: flex;
+            justify-content: flex-end;
+            flex-shrink: 0;
         }
 
         .copy-btn {
-            margin-top: 20px;
-            padding: 15px 25px;
-            background: linear-gradient(135deg, var(--alien-green) 0%, var(--alien-cyan) 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
+            padding: 8px 18px;
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 1em;
-            font-family: 'Orbitron', monospace;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .copy-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .copy-btn:hover::before {
-            left: 100%;
+            font-size: 0.78rem;
+            font-family: 'IBM Plex Mono', monospace;
+            font-weight: 500;
+            transition: all var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .copy-btn:hover {
-            transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.4);
+            border-color: var(--accent-violet);
+            color: var(--accent-violet);
+            background: rgba(167, 139, 250, 0.06);
+        }
+
+        .copy-btn:active {
+            transform: scale(0.97);
         }
 
         .copy-btn:disabled {
-            background: rgba(107, 114, 128, 0.5);
+            opacity: 0.35;
             cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
         }
 
-        .button-container {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
+        .copy-btn:disabled:hover {
+            border-color: var(--border-subtle);
+            color: var(--text-secondary);
+            background: transparent;
         }
 
-        .speech-btn {
-            padding: 15px 25px;
-            background: linear-gradient(135deg, var(--alien-purple) 0%, var(--alien-pink) 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 1em;
-            font-family: 'Orbitron', monospace;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            flex: 1;
+        .copy-btn.copied {
+            border-color: var(--success);
+            color: var(--success);
         }
 
-        .speech-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
+        .copy-icon {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* Footer */
+        .footer {
             width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s ease;
+            max-width: 1080px;
+            text-align: center;
+            padding: 20px 20px 0;
+            flex-shrink: 0;
+            z-index: 1;
         }
 
-        .speech-btn:hover::before {
-            left: 100%;
+        .footer p {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            line-height: 1.6;
         }
 
-        .speech-btn:hover {
-            transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 10px 20px rgba(139, 92, 246, 0.4);
-        }
-
-        .speech-btn:disabled {
-            background: rgba(107, 114, 128, 0.5);
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .speech-btn.speaking {
-            background: linear-gradient(135deg, var(--alien-orange) 0%, var(--alien-red) 100%);
-            animation: speechPulse 1s ease-in-out infinite;
-        }
-
-        @keyframes speechPulse {
-            0%, 100% { 
-                box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
-            }
-            50% { 
-                box-shadow: 0 0 40px rgba(239, 68, 68, 0.6);
-            }
-        }
-
-        .copy-btn {
-            flex: 1;
-            margin-top: 0;
-        }
-
-        .loading {
-            display: none;
-            color: var(--alien-orange);
-            font-style: italic;
-            margin-top: 15px;
-            animation: loadingPulse 1.5s ease-in-out infinite;
-        }
-
-        @keyframes loadingPulse {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
-        }
-
-        .error {
-            color: var(--alien-red);
-            margin-top: 15px;
-            display: none;
-            animation: errorShake 0.5s ease-in-out;
-        }
-
-        @keyframes errorShake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-
+        /* Responsive */
         @media (max-width: 768px) {
+            body {
+                padding: 20px 12px 16px;
+            }
+
+            .container {
+                max-height: none;
+            }
+
+            .header {
+                padding: 24px 20px 20px;
+            }
+
+            .header h1 {
+                font-size: 1.3rem;
+            }
+
             .translator-container {
                 grid-template-columns: 1fr;
             }
-            
-            .translator-container::before {
-                width: 80%;
-                height: 2px;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
+
+            .panel + .panel {
+                border-left: none;
+                border-top: 1px solid var(--border-subtle);
             }
-            
-            .header h1 {
-                font-size: 2.2em;
+
+            .panel {
+                padding: 20px;
             }
-            
-            body {
-                padding: 10px;
+
+            textarea {
+                min-height: 160px;
             }
-        }
-
-        /* Alien particle effects */
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: var(--alien-cyan);
-            border-radius: 50%;
-            animation: float 6s ease-in-out infinite;
-            opacity: 0.7;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
-        }
-
-        /* Extreme scanning effects */
-        .scan-beam {
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, 
-                transparent 0%, 
-                rgba(6, 182, 212, 0.8) 45%, 
-                rgba(255, 255, 255, 0.9) 50%, 
-                rgba(236, 72, 153, 0.8) 55%, 
-                transparent 100%);
-            animation: scanBeam 1s ease-in-out;
-            z-index: 10;
-            pointer-events: none;
-        }
-
-        @keyframes scanBeam {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
-
-        .data-stream {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(15, 15, 35, 0.1);
-            overflow: hidden;
-            pointer-events: none;
-            z-index: 1;
-            opacity: 0;
-        }
-
-        .data-stream.active {
-            opacity: 1;
-            animation: dataStreamFade 3s ease-in-out;
-        }
-
-        @keyframes dataStreamFade {
-            0%, 100% { opacity: 0; }
-            50% { opacity: 1; }
-        }
-
-        .matrix-char {
-            position: absolute;
-            color: var(--alien-green);
-            font-family: 'Space Mono', monospace;
-            font-size: 12px;
-            animation: matrixFall 2s linear infinite;
-        }
-
-        @keyframes matrixFall {
-            0% { top: -20px; opacity: 1; }
-            100% { top: 100%; opacity: 0; }
-        }
-
-        .alien-popup {
-            position: fixed;
-            z-index: 1000;
-            pointer-events: none;
-            font-size: 60px;
-            animation: alienPopup 2s ease-out forwards;
-        }
-
-        @keyframes alienPopup {
-            0% { 
-                transform: scale(0) rotate(0deg);
-                opacity: 0;
-            }
-            50% { 
-                transform: scale(1.2) rotate(180deg);
-                opacity: 1;
-            }
-            100% { 
-                transform: scale(0) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        .screen-glitch {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                repeating-linear-gradient(
-                    0deg,
-                    transparent 0px,
-                    rgba(139, 92, 246, 0.1) 1px,
-                    transparent 2px
-                ),
-                repeating-linear-gradient(
-                    90deg,
-                    transparent 0px,
-                    rgba(236, 72, 153, 0.05) 1px,
-                    transparent 2px
-                );
-            pointer-events: none;
-            z-index: 999;
-            opacity: 0;
-            animation: glitchEffect 0.3s ease-in-out;
-        }
-
-        @keyframes glitchEffect {
-            0%, 100% { opacity: 0; }
-            50% { opacity: 1; }
-        }
-
-        .processing-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(124, 58, 237, 0.1) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: 8;
-            opacity: 0;
-        }
-
-        .processing-overlay.active {
-            opacity: 1;
-            animation: processingPulse 1s ease-in-out infinite;
-        }
-
-        @keyframes processingPulse {
-            0%, 100% { 
-                background: radial-gradient(circle, rgba(124, 58, 237, 0.1) 0%, transparent 70%);
-                transform: scale(1);
-            }
-            50% { 
-                background: radial-gradient(circle, rgba(236, 72, 153, 0.2) 0%, transparent 70%);
-                transform: scale(1.05);
-            }
-        }
-
-        .scan-line {
-            position: absolute;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, 
-                transparent 0%, 
-                var(--alien-cyan) 50%, 
-                transparent 100%);
-            animation: scanLine 2s ease-in-out infinite;
-            z-index: 9;
-            pointer-events: none;
-        }
-
-        @keyframes scanLine {
-            0% { top: 0%; opacity: 1; }
-            100% { top: 100%; opacity: 0; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>◈ LINGUISTIC CONVERSION APPARATUS ◈</h1>
-            <p>※ Transmutating primitive human utterances into sophisticated extraterrestrial nomenclature ※</p>
-        </div>
-        
+        <header class="header">
+            <h1><span>Strange Planet</span> Translator</h1>
+            <p class="tagline">Converting primitive verbal emissions into refined extraterrestrial articulations</p>
+        </header>
 
         <div class="translator-container">
-            <div class="input-section">
-                <div class="section-title">⟦ PRIMITIVE UTTERANCE INPUT ⟧</div>
-                <textarea 
-                    id="input-text" 
-                    placeholder="Insert crude human linguistic expressions... (e.g., 'I need to water the plants')"
+            <div class="panel input-panel">
+                <div class="panel-label">Primitive Utterance</div>
+                <textarea
+                    id="input-text"
+                    placeholder="Type something ordinary... (e.g., 'I need to water the plants')"
                     autocomplete="off"
+                    spellcheck="true"
                 ></textarea>
-                <div class="loading" id="loading">⟳ Processing linguistic transmutation protocols...</div>
-                <div class="error" id="error"></div>
+                <div class="status-area">
+                    <div class="loading-indicator" id="loading">
+                        <div class="loading-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                        <span>Translating...</span>
+                    </div>
+                    <div class="error-message" id="error"></div>
+                </div>
             </div>
 
-            <div class="output-section">
-                <div class="section-title">⟦ EXTRATERRESTRIAL RENDITION ⟧</div>
-                <textarea 
-                    id="output-text" 
-                    readonly 
-                    placeholder="Advanced alien verbiage shall materialize within this receptacle..."
+            <div class="panel output-panel">
+                <div class="panel-label">Refined Articulation</div>
+                <textarea
+                    id="output-text"
+                    readonly
+                    placeholder="The translation will appear here..."
                 ></textarea>
-                <div class="button-container">
-                    <button class="copy-btn" id="copy-btn" onclick="copyTranslation()">※ DUPLICATE TRANSLATION ※</button>
-                    <button class="speech-btn" id="speech-btn" onclick="speakAlienText()">🔊 TRANSMIT AUDIO SIGNAL</button>
+                <div class="output-actions">
+                    <button class="copy-btn" id="copy-btn" disabled>
+                        <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                        <span id="copy-btn-text">Copy</span>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
+
+    <footer class="footer">
+        <p>This linguistic apparatus was constructed in admiration of the documented observations by the being known as Nathan W. Pyle. This is merely a tribute creation &mdash; all intellectual property regarding the Strange Planet civilization belongs to its original chronicler.</p>
+    </footer>
 
     <script src="/static/app.js"></script>
 </body>
